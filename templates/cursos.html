@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Cursos</h1>
+
+<!-- Butão que abre o modal para adicionar curso -->
+<button class="btn btn-success w3-right" data-toggle="modal" data-target="#myModal">Adicionar curso</button><br><br><br>
+
+<!-- Modal com o form para adicionar curso -->
+<div class="modal fade center" id="myModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Adicionar Curso</h4>
+  </div>
+  <div class="modal-body">
+    <form action="/cursos" method="post">
+      <fieldset>
+      Nome:
+      <br><input type="text" name="nome" class="w3-input w3-border" required="nome"><br>
+      Período:
+      <br><input type="number" name="periodo" max="8" min="1" class="w3-input w3-border" required="Período"><br>
+      Semestral: 
+      <input type="radio" name="semestral" value="Sim" class="w3-border"> Sim
+      <input type="radio" name="semestral" value="Não" class="w3-border"> Não
+      <br><br>
+
+      <div>
+        Disciplinas
+        <span class="glyphicon glyphicon-remove w3-right w3-text-red" style="cursor: pointer;" onclick="removerCampos(this);"></span>
+        <p> </p>
+        <span class="glyphicon glyphicon-plus w3-right w3-text-green" style="cursor: pointer;" onclick="duplicarCampos(this);"></span>
+      </div>
+        <div id="origem">
+          <div class="form-group" item-width="100%">
+            <input type="text" name="disciplinas">
+            <input type="text">
+          </div>
+        </div>
+        <div id="destino">
+        </div>
+
+      <!--Botão de ação do modal Redefinir e ADICIONAR-->
+      <div class="modal-footer">
+        <button type="reset" class="w3-btn w3-green">Redefinir</button>
+        <button type="submit" class="w3-btn w3-green">Adicionar</button>
+      </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<div class="w3-container">
+  <table class="w3-table">
+      <thead style="background-color: #4CAF50; color: white">
+        <tr>
+          <th style="width: 40%">Curso</th>
+          <th style="width: 20%">Quantidade de Períodos</th>
+          <th style="width: 20%">Semestral</th>
+          <th style="width: 20%">#</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for curso in cursos %}
+            <tr>
+              <td>{{curso.nome}}</td>
+              <td>{{curso.periodo}}</td>
+              <td>{{curso.semestral}}</td>
+              <td class="w3-center">
+                <a href="/curso={{curso.key.urlsafe()}}"><button class="btn btn-info">Disciplinas</button></a>
+            <a href="/update?curso_id={{curso.key.urlsafe()}}"><button class="btn btn-warning"><span class="glyphicon glyphicon-pencil"></span></button></a>
+            <a href="/delete?curso_id={{curso.key.urlsafe()}}"><button class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button></a>
+              </th>
+          </tr>
+          
+        {% endfor %}
+      </tbody>
+  </table>
+</div>
+
+<script type="text/javascript">
+  //método para adicionar os campos de disciplina quando o botão de mais é clicado
+  function duplicarCampos(){
+    var clone = document.getElementById('origem').cloneNode(true);
+    var destino = document.getElementById('destino');
+    destino.appendChild (clone);
+    var camposClonados = clone.getElementsByTagName('input');
+    for(i=0; i<camposClonados.length;i++){
+      camposClonados[i].value = 'disciplina';
+      camposClonados[i].name = 'disciplina';
+    }
+  }
+  //método para remover os campos de disciplina quando o botão de remover é clicado
+  function removerCampos(id){
+    var node1 = document.getElementById('destino');
+    node1.removeChild(node1.childNodes[0]);
+  }
+</script>
+
+{% endblock %}

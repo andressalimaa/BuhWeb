@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Professor</h1>
+
+<form action="/professor" enctype="multipart/form-data" method="post">
+    <fieldset>
+        <legend>Adicionar Professor</legend>
+        <div><label>Nome:</label></div>
+        <div><input type="text" name="nome"/></div>
+        <div><label>Área:</label></div>
+        <div><input type="text" name="area"/></div>
+        <div><label>Perfil:</label></div>
+        <div><input type="text" name="perfil"/></div>
+        <div><label>email:</label></div>
+        <div><input type="text" name="email"/></div>
+        <div><label>Foto:</label></div>
+        <div><input type="file" name="img"/></div><br>
+        <div><input type="reset" name="reset"><spam> </spam><input type="submit" value="Adicionar"></div>
+    </fieldset>
+</form>
+
+<h1>Professores</h1>
+<table class="w3-table w3-striped">
+    <tr>
+        <th>Foto</th>
+        <th>Nome</th>
+        <th>Área</th>
+        <th>Perfil</th>
+        <th>email</th>
+    </tr>
+    {% for professor in professores %}
+        <tr>
+            <td><img width="128px" height="128px" src="/img?img_id={{professor.key.urlsafe()}}"></img></td>
+            <td>{{professor.nome}}</td>
+            <td>{{professor.area}}</td>
+            <td>{{professor.perfil}}</td>
+            <td>{{professor.email}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}
